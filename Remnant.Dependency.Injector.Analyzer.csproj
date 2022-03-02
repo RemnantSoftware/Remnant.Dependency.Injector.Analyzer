@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <PackageId>Remnant.Dependency.Injector.Analyzer</PackageId>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageVersion>1.0.3</PackageVersion>
     <Authors>Neill Verreynne</Authors>
     <RepositoryUrl>https://github.com/RemnantSoftware/Remnant.Dependency.Injector.Analyzer</RepositoryUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

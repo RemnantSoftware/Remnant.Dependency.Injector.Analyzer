@@ -43,13 +43,6 @@ namespace Remnant.Dependency.Injector
 					sb.AppendLine($"\tpublic partial class {@class.Identifier.Text}");
 					sb.AppendLine("\t{");
 
-					sb.AppendLine($"\t\tpublic static {@class.Identifier.Text} Create()");
-					sb.AppendLine("\t\t{");
-					sb.AppendLine($"\t\t\tvar instance = new {@class.Identifier.Text}();");
-					sb.AppendLine("\t\t\tinstance.Inject();");
-					sb.AppendLine("\t\t\treturn instance;");
-					sb.AppendLine("\t\t}");
-
 					if (constructor == null)
 					{
 						sb.AppendLine($"\t\tpublic {@class.Identifier.Text}()");
@@ -57,10 +50,19 @@ namespace Remnant.Dependency.Injector
 						GenerateResolve(context, fieldNodes, sb);
 						sb.AppendLine("\t\t}");
 					}
+					else
+					{
+						sb.AppendLine($"\t\tpublic static {@class.Identifier.Text} Create()");
+						sb.AppendLine("\t\t{");
+						sb.AppendLine($"\t\t\tvar instance = new {@class.Identifier.Text}();");
+						sb.AppendLine("\t\t\tinstance.Inject();");
+						sb.AppendLine("\t\t\treturn instance;");
+						sb.AppendLine("\t\t}");
 
-					sb.AppendLine($"\t\tprivate void Inject() {{");
-					GenerateResolve(context, fieldNodes, sb);
-					sb.AppendLine("\t\t}");
+						sb.AppendLine($"\t\tpublic void Inject() {{");
+						GenerateResolve(context, fieldNodes, sb);
+						sb.AppendLine("\t\t}");
+					}
 
 					sb.AppendLine("\t}"); //class
 					sb.AppendLine("}"); //ns
