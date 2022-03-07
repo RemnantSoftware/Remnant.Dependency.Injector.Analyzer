@@ -33,6 +33,7 @@ namespace Remnant.Dependency.Injector
 					var constructor = @class.Members.OfType<ConstructorDeclarationSyntax>()
 							.Where(x => x.ParameterList.Parameters.Count == 0).FirstOrDefault();
 
+					var usings = new List<string>();	
 					var sb = new StringBuilder();
 
 					var ns = @class.Parent as NamespaceDeclarationSyntax;
@@ -47,7 +48,7 @@ namespace Remnant.Dependency.Injector
 					{
 						sb.AppendLine($"\t\tpublic {@class.Identifier.Text}()");
 						sb.AppendLine("\t\t{");
-						GenerateResolve(context, fieldNodes, sb);
+						usings = GenerateResolve(context, fieldNodes, sb);
 						sb.AppendLine("\t\t}");
 					}
 					else
@@ -60,20 +61,24 @@ namespace Remnant.Dependency.Injector
 						sb.AppendLine("\t\t}");
 
 						sb.AppendLine($"\t\tpublic void Inject() {{");
-						GenerateResolve(context, fieldNodes, sb);
+						usings = GenerateResolve(context, fieldNodes, sb);
 						sb.AppendLine("\t\t}");
 					}
 
 					sb.AppendLine("\t}"); //class
 					sb.AppendLine("}"); //ns
 
+					usings.ForEach(u => sb.Insert(0, u + "\n"));
+
 					context.AddSource($"{@class.Identifier.Text}.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
 				}
 			}
 		}
 
-		private static void GenerateResolve(GeneratorExecutionContext context, List<FieldDeclarationSyntax> fieldNodes, StringBuilder sb)
+		private static List<string> GenerateResolve(GeneratorExecutionContext context, List<FieldDeclarationSyntax> fieldNodes, StringBuilder sb)
 		{
+			var usings = new List<string>();
+
 			foreach (var fieldDeclaration in fieldNodes)
 			{
 				foreach (var variable in fieldDeclaration.Declaration.Variables)
@@ -82,6 +87,12 @@ namespace Remnant.Dependency.Injector
 					var symbol = context.Compilation.GetSemanticModel(variable.SyntaxTree).GetDeclaredSymbol(variable) as IFieldSymbol;
 					var attr = symbol.GetAttributes().FirstOrDefault(a => a.GetType().FullName == "Remnant.Dependency.Injector.InjectAttribute");
 					var injectType = symbol.Type.Name;
+					var useClause = $"using {symbol.Type.ContainingNamespace};";
+
+					if (!usings.Contains(useClause))
+					{
+						usings.Add(useClause);
+					}
 
 					if (attr != null)
 					{
@@ -91,6 +102,8 @@ namespace Remnant.Dependency.Injector
 					sb.AppendLine($"\t\t\t{fieldSymbol} = this.Resolve<{injectType}>();");
 				}
 			}
+
+			return usings;
 		}
 	}
 }
