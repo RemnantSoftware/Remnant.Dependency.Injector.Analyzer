@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <PackageId>Remnant.Dependency.Injector.Analyzer</PackageId>
-    <PackageVersion>1.0.4</PackageVersion>
+    <PackageVersion>1.1.0</PackageVersion>
     <Authors>Neill Verreynne</Authors>
     <RepositoryUrl>https://github.com/RemnantSoftware/Remnant.Dependency.Injector.Analyzer</RepositoryUrl>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -24,7 +24,7 @@
 
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
 
-    <Version>1.0.2</Version>
+    <Version>1.1.0</Version>
 
     <Company>Remnant Software</Company>
     <RepositoryType>git</RepositoryType>

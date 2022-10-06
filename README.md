@@ -6,4 +6,4 @@ Dependency injection attribute analyzer
 
 ## Nuget package:
 
-        Install-Package Remnant.Dependency.Injector.Analyzer -Version 1.0.4
+        Install-Package Remnant.Dependency.Injector.Analyzer -Version 1.1.0
